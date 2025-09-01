@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
     <title>Examen Cloud Computing</title>
     <style>
         * {
@@ -193,6 +194,330 @@
         <div id="questionsContainer">
             <!-- Questions will be loaded here -->
         </div>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
+    <title>Examen Cloud Computing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #fafafa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .progress {
+            background: #e0e0e0;
+            height: 2px;
+            border-radius: 1px;
+            margin: 30px 0;
+        }
+
+        .progress-bar {
+            background: #007aff;
+            height: 100%;
+            border-radius: 1px;
+            transition: width 0.3s ease;
+        }
+
+        .question {
+            background: white;
+            border: 1px solid #e6e6e6;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .question-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .question-number {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+
+        .options {
+            padding: 0;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 16px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .option:last-child {
+            border-bottom: none;
+        }
+
+        .option:hover {
+            background-color: #f8f8f8;
+        }
+
+        .option.selected {
+            background-color: #f0f8ff;
+            border-left: 3px solid #007aff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            transform: scale(1.1);
+        }
+
+        .option-text {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e6e6e6;
+        }
+
+        .btn {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn:hover {
+            background: #0056cc;
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #007aff;
+            border: 1px solid #007aff;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f8ff;
+        }
+
+        .stats {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .results-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .results-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .results-header {
+            padding: 30px 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .score-excellent { background: #22c55e; }
+        .score-good { background: #f59e0b; }
+        .score-poor { background: #ef4444; }
+
+        .results-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .results-subtitle {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .results-body {
+            padding: 20px 30px;
+        }
+
+        .wrong-answer {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .wrong-question {
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 8px;
+        }
+
+        .answer-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+            font-size: 14px;
+        }
+
+        .answer-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: white;
+        }
+
+        .wrong-icon { background: #ef4444; }
+        .correct-icon { background: #22c55e; }
+
+        .results-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .close-btn {
+            background: #007aff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background: #0056cc;
+        }
+
+        .perfect-score {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .perfect-emoji {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+            
+            .question-header {
+                padding: 16px 20px 12px;
+            }
+            
+            .option {
+                padding: 14px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Cloud Computing Exam</h1>
+            <p>Selecciona la respuesta correcta para cada pregunta</p>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+
+        <div id="questionsContainer">
+            <!-- Questions will be loaded here -->
+        </div>
 
         <div class="controls">
             <div class="stats">
@@ -205,6 +530,29 @@
         </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <!-- Results Modal -->
+    <div class="results-modal" id="resultsModal">
+        <div class="results-content">
+            <div class="results-header">
+                <div class="score-circle" id="scoreCircle">
+                    <span id="scoreText">0%</span>
+                </div>
+                <div class="results-title" id="resultsTitle">¡Examen completado!</div>
+                <div class="results-subtitle" id="resultsSubtitle">
+                    <span id="correctCount">0</span> de <span id="totalQuestions">20</span> respuestas correctas
+                </div>
+            </div>
+            
+            <div class="results-body" id="resultsBody">
+                <!-- Wrong answers will appear here -->
+            </div>
+            
+            <div class="results-footer">
+                <button class="close-btn" onclick="closeResults()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+  <script src="/js/app.js"></script>
 </body>
 </html>
